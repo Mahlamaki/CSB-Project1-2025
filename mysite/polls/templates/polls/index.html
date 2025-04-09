@@ -19,5 +19,23 @@
     {% else %}
     	<p>No polls are available.</p>
     {% endif %}
+    
+    <h3> Create a new poll</h3>
+    <form method="post" action="{% url 'polls:create' %}">
+    	{% csrf_token %}
+    	<label for="question_text">What do you want to ask?:</label>
+    	<input type="text" name="question_text" id="question_text" required><br>
+    	<br>
+    	
+    	<label> 1.Choice:</label>
+    	<input type="text" name="1choice" required><br>    	
+    	<label> 2.Choice:</label>
+    	<input type="text" name="2choice" required><br>
+    	<label> 3.Choice:</label>
+    	<input type="text" name="3choice" required><br>
+    	<br>
+    	
+    	<button type="submit">Add new poll</button>
+    </form>
   </body>
 </html>
