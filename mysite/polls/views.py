@@ -71,5 +71,5 @@ def vote(request, question_id):
         selected_choice.votes = F("votes") + 1
         selected_choice.save()
         #already_voted.append(question_id)
-        #request.session["already_voted] = already_voted
+        #request.session["already_voted"] = already_voted
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
