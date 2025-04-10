@@ -22,7 +22,8 @@
     
     <h3> Create a new poll</h3>
     <form method="post" action="{% url 'polls:create' %}">
-    	{% csrf_token %}
+    	# CSRF flaw on row 26. To fix this, {% csrf_token %} should be part of the code, and not commented out like it now is.
+    	#{% csrf_token %}
     	<label for="question_text">What do you want to ask?:</label>
     	<input type="text" name="question_text" id="question_text" required><br>
     	<br>
