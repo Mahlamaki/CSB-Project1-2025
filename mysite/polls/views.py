@@ -50,6 +50,10 @@ def create_poll(request):
     
 
 def vote(request, question_id):
+    # Below (uncommented def vote as a whole) we have an example of an Insicure Design flaw. One person can uncontrollably vote on the same poll many times. To fix this without adding login function, we can help the situation by using sessions. See rows 55-57 and 74-75.
+    #already_voted = request.session.get("already_voted", [])
+    #if question_id in already_voted:
+    #	return HttpResponse("You can only vote ONCE on each poll!")
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
@@ -66,7 +70,6 @@ def vote(request, question_id):
     else:
         selected_choice.votes = F("votes") + 1
         selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
+        #already_voted.append(question_id)
+        #request.session["already_voted] = already_voted
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
