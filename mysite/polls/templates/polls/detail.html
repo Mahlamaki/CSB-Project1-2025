@@ -8,7 +8,7 @@
     <form action="{% url 'polls:vote' question.id %}" method="post">
     {% csrf_token %}
     <fieldset>
-    	# XSS Flaw on row 12. To fix this flaw, we need to just erase "|safe"
+    	<!-- XSS Flaw on row 12. To fix this flaw, we need to just erase "|safe" -->
     	<legend><h1>{{ question.question_text|safe }}</h1></legend>
     	{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     	{% for choice in question.choice_set.all %}
