@@ -19,6 +19,12 @@ def detail(request, question_id):
 
 
 def results(request, question_id):
+
+    # This is the fix for the Broken Access Control (url manipulation) flaw. For this, also the fix in vote() function needs to be implemented. Now people can go view the results of the poll before actually voting, by using /polls/id/results. To fix this, we first made changes in vote() (added already_voted) and now we need to add
+    # already_voted = request.session.get("already_voted", [])
+    #if question_id not in already_voted:
+    	#return HttpResponse("You must vote before you can see the results")
+
     question = get_object_or_404(Question, pk=question_id)
     return render(request, "polls/results.html", {"question": question})
     
