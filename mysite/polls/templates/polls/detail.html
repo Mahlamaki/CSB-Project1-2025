@@ -9,7 +9,7 @@
     {% csrf_token %}
     <fieldset>
     	<!-- XSS Flaw on row 12. To fix this flaw, we need to just erase "|safe" -->
-    	<legend><h1>{{ question.question_text|safe }}</h1></legend>
+    	<legend><h1>{{ question.question_text|safe}}</h1></legend>
     	{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     	{% for choice in question.choice_set.all %}
     		<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">

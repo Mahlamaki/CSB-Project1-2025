@@ -21,9 +21,9 @@ def detail(request, question_id):
 def results(request, question_id):
 
     # Flaw: Broken Access Control (url manipulation). For this, also the fix in vote() function needs to be implemented. 
-    # Now people can go view the results of the poll before actually voting, by using /polls/id/results.
+    # Before the fix, people can go view the results of the poll before actually voting, by using /polls/id/results.
     # FIX: To fix this, we first made changes in vote() (added already_voted) and now we need to check if we have voted on the poll which results we are trying to see. See rows 26-28.
-    # already_voted = request.session.get("already_voted", [])
+    #already_voted = request.session.get("already_voted", [])
     #if question_id not in already_voted:
     	#return HttpResponse("You must vote before you can see the results")
 
@@ -40,9 +40,9 @@ def create_poll(request):
     	
     	# Flaw: Below is SQl Injection flaw, see rows 42-43
     	with connection.cursor() as cursor:
-    		cursor.execute(f"INSERT INTO polls_question (question_text, pub_date) VALUES ('{question_text}', '{timezone.now()}')")
+    		cursor.executescript(f"INSERT INTO polls_question (question_text, pub_date) VALUES ('{question_text}', '{timezone.now()}')")
     	# FIX: see row 45
-    	# Question.objects.create(question_text=question_text, pub_date=timezone.now())
+    	#Question.objects.create(question_text=question_text, pub_date=timezone.now())
     
     
     
@@ -59,10 +59,10 @@ def create_poll(request):
 
 def vote(request, question_id):
     # Flaw: Insecure Design. Below (uncommented vote() as a whole) you can uncontrollably vote on the same poll many times. 
-    # FIX: To fix this without adding login function, we can help the situation by using sessions. See rows 63-65 and 81-82.
-    # already_voted = request.session.get("already_voted", [])
-    # if question_id in already_voted:
-    #	 return HttpResponse("You can only vote ONCE on each poll!")
+    # FIX: To fix this without adding login function, we can help the situation by using sessions and tracking which polls have been aswered already. See rows 63-65 and 81-82.
+    #already_voted = request.session.get("already_voted", [])
+    #if question_id in already_voted:
+    	#return HttpResponse("You can only vote ONCE on each poll!")
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
@@ -78,6 +78,6 @@ def vote(request, question_id):
     else:
         selected_choice.votes = F("votes") + 1
         selected_choice.save()
-        # already_voted.append(question_id)
-        # request.session["already_voted"] = already_voted
+        #already_voted.append(question_id)
+        #request.session["already_voted"] = already_voted
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
