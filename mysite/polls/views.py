@@ -58,7 +58,7 @@ def create_poll(request):
     
 
 def vote(request, question_id):
-    # Flaw: Security Misconfiguration. Below (uncommented vote() as a whole) you can uncontrollably vote on the same poll many times. 
+    # Flaw: Insecure Design. Below (uncommented vote() as a whole) you can uncontrollably vote on the same poll many times. 
     # FIX: To fix this without adding login function, we can help the situation by using sessions and tracking which polls have been aswered already. See rows 63-65 and 81-82.
     #already_voted = request.session.get("already_voted", [])
     #if question_id in already_voted:
